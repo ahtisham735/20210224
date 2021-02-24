@@ -1,5 +1,4 @@
-from collections import defaultdict
-import sys
+from collections import defaultdict 
 mylist=[]
 try:
 	with open("input.txt") as data:

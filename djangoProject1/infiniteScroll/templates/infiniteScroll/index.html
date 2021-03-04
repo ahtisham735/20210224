@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Infinite Scrolling</title>
+    <style>
+        @keyframes hide {
+        0%{
+            opacity: 1;
+            height: 100%;
+            line-height: 100%;
+            padding: 20px;
+            margin-bottom: 20px;
+
+        }
+            75%{
+                opacity: 0;
+                height: 100%;
+                line-height: 100%;
+                padding: 20px;
+                margin-bottom: 20px;
+
+
+            }
+            100%{
+                opacity: 0;
+                height: 0%;
+                line-height: 0%;
+                padding: 0px;
+                margin-bottom: 0px;
+
+            }
+        }
+        .post{
+            background-color:greenyellow;
+            font-size: 25px;
+            padding: 20px;
+            margin:20px;
+            font-family: sans-serif;
+            animation-name: hide;
+            animation-play-state: paused;
+            animation-fill-mode: forwards;
+            animation-duration: 2s;
+        }
+        button{
+            float: right;
+            height: 30px;
+            width:50px;
+        }
+    </style>
+    <script>
+        let counter=1;
+        const quantity=20;
+        document.addEventListener('DOMContentLoaded',load);
+        function  load(){
+            const start=counter;
+            const end=start+quantity-1;
+            counter=end+1;
+            fetch(`infiniteScroll/posts?start=${start}&end=${end}`)
+            .then(response=>response.json())
+            .then(data=>{
+                data.posts.forEach(add_post);
+            })
+
+        }
+        function add_post(content){
+          const post=document.createElement('div');
+          post.className="post";
+          post.innerHTML=(`${content} <button class="hide">hide</button>`);
+          document.querySelector("#posts").append(post);
+        }
+        window.onscroll=()=>{
+            if(window.innerHeight+window.scrollY>=document.body.offsetHeight){
+                load();
+            }
+        };
+        document.addEventListener('click',event=>{
+            const element=event.target;
+            if(element.className==='hide'){
+
+                element.parentElement.style.animationPlayState='running';
+                element.parentElement.addEventListener('animationend',()=>{
+                    element.parentElement.remove();
+                })
+
+            }
+        });
+    </script>
+
+</head>
+<body>
+<div id="posts">
+
+</div>
+</body>
+</html>

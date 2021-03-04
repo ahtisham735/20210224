@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        function showSection(num){
+            fetch(`section/${num}`)
+            .then(response=>response.text())
+            .then(text=>{
+                console.log(text);
+               document.querySelector('#content').innerHTML=text;
+            });
+        }
+        document.addEventListener('DOMContentLoaded',()=>{
+            document.querySelectorAll('button').forEach(b=>{
+                b.addEventListener('click',function(){
+                    const section=this.dataset.section;
+                    //pushing section details to the history in order to maintain URL
+                    history.pushState({section:section},"",`section${section}`);
+                    showSection(this.dataset.section);
+
+                });
+            });
+        });
+
+        window.onpopstate=function(event){
+            console.log(event.state.section);
+            showSection(event.state.section);
+        }
+    </script>
+</head>
+<body>
+    <h1>single Page 1</h1>
+    <button data-section="1">section1</button>
+    <button data-section="2">section2</button>
+    <button data-section="3">section3</button>
+    <div id="content">
+    </div>
+</body>
+</html>

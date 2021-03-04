@@ -1,0 +1,40 @@
+{% extends 'singlePage/layout.html' %}
+
+
+{% block body %}
+    <style>
+
+    div{
+        display: none;
+    }
+    </style>
+    <script>
+    function showPage(page){
+        document.querySelectorAll('div').forEach(d=>{
+            d.style.display='none';
+        });
+        document.querySelector(`#${page}`).style.display='block';
+    }
+    document.addEventListener('DOMContentLoaded',function (){
+        document.querySelectorAll('button').forEach(button=>{
+            button.onclick=function(){
+                showPage(this.dataset.page);
+            }
+
+        });
+    });
+    </script>
+    <h1>Single Page Application</h1>
+    <button data-page="page1">Page1</button>
+    <button data-page="page2">Page2</button>
+    <button data-page="page3">Page3</button>
+    <div id="page1">
+        <h1>Page1</h1>
+    </div>
+    <div id="page2">
+        <h1>Page2</h1>
+    </div>
+    <div id="page3">
+        <h1>Page3</h1>
+    </div>
+{% endblock %}
